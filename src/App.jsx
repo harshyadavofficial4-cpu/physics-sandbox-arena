@@ -119,17 +119,27 @@ function App() {
     ];
 
     for (let i = 0; i < 8; i++) {
-      enemies.push(
-        new Enemy(
-          Math.random() * canvas.width,
-          Math.random() * canvas.height,
-          Math.random() * 30 + 15,
-          (Math.random() - 0.5) * 5,
-          (Math.random() - 0.5) * 5,
-          colors[Math.floor(Math.random() * colors.length)]
-        )
-      );
-    }
+  let x;
+  let y;
+
+  do {
+    x = Math.random() * canvas.width;
+    y = Math.random() * canvas.height;
+  } while (
+    Math.hypot(x - player.x, y - player.y) < 250
+  );
+
+  enemies.push(
+    new Enemy(
+      x,
+      y,
+      Math.random() * 30 + 15,
+      (Math.random() - 0.5) * 5,
+      (Math.random() - 0.5) * 5,
+      colors[Math.floor(Math.random() * colors.length)]
+    )
+  );
+}
 
     window.addEventListener("keydown", (e) => {
       gameStarted = true;
@@ -239,7 +249,9 @@ function App() {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       ctx.fillStyle = "red";
-      ctx.font = "60px Arial";
+      ctx.font = isMobile
+  ? "42px Arial"
+  : "60px Arial";
 
       ctx.fillText(
         "GAME OVER",
@@ -248,7 +260,9 @@ function App() {
       );
 
       ctx.fillStyle = "white";
-      ctx.font = "32px Arial";
+      ctx.font = isMobile
+  ? "24px Arial"
+  : "32px Arial";
 
       ctx.fillText(
         `Score: ${Math.floor(score)}`,
