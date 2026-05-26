@@ -151,13 +151,17 @@ function App() {
     });
 
     canvas.addEventListener("touchstart", (e) => {
-      gameStarted = true;
 
-      const touch = e.touches[0];
+  if (!gameStarted) {
+    gameStarted = true;
+  }
 
-      touchTarget.x = touch.clientX;
-      touchTarget.y = touch.clientY;
-    });
+  const touch = e.touches[0];
+
+  touchTarget.x = touch.clientX;
+  touchTarget.y = touch.clientY;
+
+}, { passive: true });
 
     canvas.addEventListener("touchmove", (e) => {
       const touch = e.touches[0];
@@ -286,7 +290,7 @@ function App() {
     function animate() {
       animationId = requestAnimationFrame(animate);
 
-      if (!gameStarted) {
+      if (!gameStarted && score === 0) {
         drawStartScreen();
         return;
       }
