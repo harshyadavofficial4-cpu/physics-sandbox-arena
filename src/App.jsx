@@ -15,6 +15,8 @@ function App() {
     let animationId;
 
     let gameStarted = false;
+    let hasPlayedBefore =
+  localStorage.getItem("hasPlayedBefore") === "true";
     let gameOver = false;
     let score = 0;
 
@@ -142,9 +144,16 @@ function App() {
 }
 
     window.addEventListener("keydown", (e) => {
-      gameStarted = true;
-      keys[e.key] = true;
-    });
+  gameStarted = true;
+  hasPlayedBefore = true;
+
+  localStorage.setItem(
+    "hasPlayedBefore",
+    "true"
+  );
+
+  keys[e.key] = true;
+});
 
     window.addEventListener("keyup", (e) => {
       keys[e.key] = false;
@@ -153,8 +162,14 @@ function App() {
     canvas.addEventListener("touchstart", (e) => {
 
   if (!gameStarted) {
-    gameStarted = true;
-  }
+  gameStarted = true;
+  hasPlayedBefore = true;
+
+  localStorage.setItem(
+    "hasPlayedBefore",
+    "true"
+  );
+}
 
   const touch = e.touches[0];
 
@@ -290,10 +305,10 @@ function App() {
     function animate() {
       animationId = requestAnimationFrame(animate);
 
-      if (!gameStarted && score === 0) {
-        drawStartScreen();
-        return;
-      }
+      if (!gameStarted && !hasPlayedBefore) {
+    drawStartScreen();
+    return;
+}
 
       ctx.fillStyle = "rgba(0,0,0,0.2)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
