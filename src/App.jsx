@@ -15,8 +15,7 @@ function App() {
     let animationId;
 
     let gameStarted = false;
-    let hasPlayedBefore =
-  localStorage.getItem("hasPlayedBefore") === "true";
+    let hasPlayedBefore = false;
     let gameOver = false;
     let score = 0;
 
@@ -144,13 +143,8 @@ function App() {
 }
 
     window.addEventListener("keydown", (e) => {
-  gameStarted = true;
-  hasPlayedBefore = true;
-
-  localStorage.setItem(
-    "hasPlayedBefore",
-    "true"
-  );
+      gameStarted = true;
+      hasPlayedBefore = true;
 
   keys[e.key] = true;
 });
@@ -164,11 +158,6 @@ function App() {
   if (!gameStarted) {
   gameStarted = true;
   hasPlayedBefore = true;
-
-  localStorage.setItem(
-    "hasPlayedBefore",
-    "true"
-  );
 }
 
   const touch = e.touches[0];
@@ -290,22 +279,27 @@ function App() {
       );
 
       ctx.fillText(
-        "Click to Restart",
+  isMobile
+    ? "Tap to Restart"
+    : "Click to Restart",
         canvas.width / 2 - 120,
         canvas.height / 2 + 100
       );
     }
 
-    canvas.addEventListener("click", () => {
-      if (gameOver) {
-        setRestartGame((prev) => prev + 1);
-      }
-    });
+   const handleRestart = () => {
+  if (gameOver) {
+    setRestartGame((prev) => prev + 1);
+  }
+};
 
+canvas.addEventListener("click", handleRestart);
+
+canvas.addEventListener("click", handleRestart);
     function animate() {
       animationId = requestAnimationFrame(animate);
 
-      if (!gameStarted && !hasPlayedBefore) {
+     if (!gameStarted && score === 0) {
     drawStartScreen();
     return;
 }
@@ -368,8 +362,10 @@ function App() {
     animate();
 
     return () => {
-      cancelAnimationFrame(animationId);
-    };
+  cancelAnimationFrame(animationId);
+
+  canvas.removeEventListener("click", handleRestart);
+};
   }, [restartGame]);
 
   return (
