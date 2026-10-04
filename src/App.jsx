@@ -15,7 +15,6 @@ function App() {
     let animationId;
 
     let gameStarted = false;
-    let hasPlayedBefore = false;
     let gameOver = false;
     let score = 0;
 
@@ -144,7 +143,6 @@ function App() {
 
     window.addEventListener("keydown", (e) => {
       gameStarted = true;
-      hasPlayedBefore = true;
 
   keys[e.key] = true;
 });
@@ -157,7 +155,6 @@ function App() {
 
   if (!gameStarted) {
   gameStarted = true;
-  hasPlayedBefore = true;
 }
 
   const touch = e.touches[0];
